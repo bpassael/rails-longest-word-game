@@ -3,14 +3,13 @@ require 'json'
 
 class GamesController < ApplicationController
 
-
-  @@alphabet = *('A'..'Z')
-
   def new
+    session[:total_score] = 0 unless session[:total_score]
+    @alphabet = *('A'..'Z')
     @letters = []
     @start_time = DateTime.now.to_time.to_i
     10.times do
-      @letters << @@alphabet.sample
+      @letters << @alphabet.sample
     end
     @letters
   end
@@ -31,8 +30,12 @@ class GamesController < ApplicationController
                else
                  1
                end
-
     end
+    session[:total_score] += @score
+  end
+
+  def clear
+    reset_session
   end
 
   private

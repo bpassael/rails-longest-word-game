@@ -9,6 +9,10 @@
 
     <p>Your score is: <%= @score %></p>
 
+    <p>Your total score is: <%= session[:total_score] %></p>
+
   <%= link_to "Play again", new_path %>
+
+  <%= button_to "Reset score", clear_path, method: "post" %>
 
 </div>
