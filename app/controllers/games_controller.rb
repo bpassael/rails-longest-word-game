@@ -6,11 +6,17 @@ class GamesController < ApplicationController
   def new
     session[:total_score] = 0 unless session[:total_score]
     @alphabet = *('A'..'Z')
+    @vowels = %w[A E I O U]
+    @consonnants = %w[B C D F G H J K L M N P Q R S T V W X Y Z]
     @letters = []
     @start_time = DateTime.now.to_time.to_i
-    10.times do
-      @letters << @alphabet.sample
+    5.times do
+      @letters << @vowels.sample
     end
+    5.times do
+      @letters << @consonnants.sample
+    end
+    @letters.shuffle!
     @letters
   end
 
@@ -20,7 +26,7 @@ class GamesController < ApplicationController
     @score = 0
     @guessedword = params[:guessedword].upcase
     if !valid?(@guessedword, params[:value].split(' '))
-      @message = "Sorry but #{@guessedword} can't be built out of #{@initial_grid.join(', ')}"
+      @message = "Sorry but #{@guessedword} can't be built out of #{params[:value]}"
     elsif !in_dictionnary?(@guessedword)
       @message = "Sorry but #{@guessedword} doesn't seem to be a valid English word..."
     else
@@ -36,6 +42,7 @@ class GamesController < ApplicationController
 
   def clear
     reset_session
+    redirect_to new_path
   end
 
   private
